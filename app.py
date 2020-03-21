@@ -27,7 +27,7 @@ current_hosp = st.sidebar.number_input(
 )
 
 doubling_time = st.sidebar.number_input(
-     "Tiempo de duplicación antes del distanciamiento social (días)", value=6, step=1, format="%i"
+     "Tiempo de duplicacion antes del distanciamiento social (dias)", value=6, step=1, format="%i"
 )
 relative_contact_rate = st.sidebar.number_input(
     "Distanciamiento social (% de reducción en el contacto social)", 0, 100, value=0, step=5, format="%i"
