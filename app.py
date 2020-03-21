@@ -23,7 +23,7 @@ known_cases = 4 # update daily
 
 # Widgets
 current_hosp = st.sidebar.number_input(
-    "Pacientes hospitalizados actualmente con COVID-19", value=known_cases, step=1, format="%i"
+    "Hospitalizados actualmente con COVID-19", value=known_cases, step=1, format="%i"
 )
 
 doubling_time = st.sidebar.number_input(
