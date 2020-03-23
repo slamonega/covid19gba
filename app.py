@@ -58,7 +58,7 @@ S = st.sidebar.number_input(
 )
 
 initial_infections = st.sidebar.number_input(
-    "Currently Known Regional Infections (only used to compute detection rate - does not change projections)", value=known_infections, step=10, format="%i"
+    "Infecciones actuales en la Región (solo se usa para calcular la tasa de detección, no cambia las proyecciones)", value=known_infections, step=10, format="%i"
 )
 
 total_infections = current_hosp / Penn_market_share / hosp_rate
@@ -83,10 +83,10 @@ doubling_time_t = 1/np.log2(beta*S - gamma +1) # doubling time after distancing
 
 def head():
     st.markdown("""
-<link rel="stylesheet" href="https://www1.pennmedicine.org/styles/shared/penn-medicine-header.css">
+<link rel="stylesheet" href="https://covid19.regionsanitaria1.com/simulador.css">
 
 <div class="penn-medicine-header__content">
-    <a href="https://www.pennmedicine.org" class="penn-medicine-header__logo"
+    <a href="https://covid19.regionsanitaria1.com" class="penn-medicine-header__logo"
         title="Go to the Penn Medicine home page">Penn Medicine</a>
     <a id="title" class="penn-medicine-header__title">Penn Medicine - COVID-19 Hospital Impact Model for Epidemics</a>
 </div>
