@@ -23,42 +23,42 @@ known_cases = 4 # update daily
 
 # Widgets
 current_hosp = st.sidebar.number_input(
-    "Hospitalizados actualmente con COVID-19", value=known_cases, step=1, format="%i"
+    "Currently Hospitalized COVID-19 Patients", value=known_cases, step=1, format="%i"
 )
 
 doubling_time = st.sidebar.number_input(
-    "Tiempo de duplicación antes del distanciamiento social (días)", value=6, step=1, format="%i"
+    "Doubling time before social distancing (days)", value=6, step=1, format="%i"
 )
 relative_contact_rate = st.sidebar.number_input(
-    "Distanciamiento social (% de reducción en el contacto social)", 0, 100, value=0, step=5, format="%i"
+    "Social distancing (% reduction in social contact)", 0, 100, value=0, step=5, format="%i"
 )/100.0
 
 hosp_rate = (
-    st.sidebar.number_input("Hospitalización% (infecciones totales)", 0.0, 100.0, value=5.0, step=1.0, format="%f")
+    st.sidebar.number_input("Hospitalization %(total infections)", 0.0, 100.0, value=5.0, step=1.0, format="%f")
     / 100.0
 )
 icu_rate = (
-    st.sidebar.number_input("UTI% (infecciones totales)", 0.0, 100.0, value=2.0, step=1.0, format="%f") / 100.0
+    st.sidebar.number_input("ICU %(total infections)", 0.0, 100.0, value=2.0, step=1.0, format="%f") / 100.0
 )
 vent_rate = (
-    st.sidebar.number_input("% ventilado (infecciones totales)", 0.0, 100.0, value=1.0, step=1.0, format="%f")
+    st.sidebar.number_input("Ventilated %(total infections)", 0.0, 100.0, value=1.0, step=1.0, format="%f")
     / 100.0
 )
-hosp_los = st.sidebar.number_input("Duración de la estadía en el hospital", value=7, step=1, format="%i")
-icu_los = st.sidebar.number_input("Estadía en UTI", value=9, step=1, format="%i")
-vent_los = st.sidebar.number_input("Estadía Ventilado", value=10, step=1, format="%i")
+hosp_los = st.sidebar.number_input("Hospital Length of Stay", value=7, step=1, format="%i")
+icu_los = st.sidebar.number_input("ICU Length of Stay", value=9, step=1, format="%i")
+vent_los = st.sidebar.number_input("Vent Length of Stay", value=10, step=1, format="%i")
 Penn_market_share = (
     st.sidebar.number_input(
-        "Porcentaje de la atención a cargo del Hospital sobre la población (%)", 0.0, 100.0, value=15.0, step=1.0, format="%f"
+        "Hospital Market Share (%)", 0.0, 100.0, value=15.0, step=1.0, format="%f"
     )
     / 100.0
 )
 S = st.sidebar.number_input(
-    "Población Regional", value=S_default, step=100000, format="%i"
+    "Regional Population", value=S_default, step=100000, format="%i"
 )
 
 initial_infections = st.sidebar.number_input(
-    "Infecciones regionales actualmente conocidas (solo se usa para calcular la tasa de detección, no cambia las proyecciones)", value=known_infections, step=10, format="%i"
+    "Currently Known Regional Infections (only used to compute detection rate - does not change projections)", value=known_infections, step=10, format="%i"
 )
 
 total_infections = current_hosp / Penn_market_share / hosp_rate
@@ -271,18 +271,35 @@ hosp = i * hosp_rate * Penn_market_share
 icu = i * icu_rate * Penn_market_share
 vent = i * vent_rate * Penn_market_share
 
+# Recovered
+r_hosp = r * hosp_rate * Penn_market_share
+r_icu = r * icu_rate * Penn_market_share
+r_vent = r * vent_rate * Penn_market_share
+
+
+
 days = np.array(range(0, n_days + 1))
 data_list = [days, hosp, icu, vent]
 data_dict = dict(zip(["day", "hosp", "icu", "vent"], data_list))
 
+
+r_data_list = [days, r_hosp, r_icu, r_vent]
+r_data_dict = dict(zip(["day", "hosp", "icu", "vent"], r_data_list))
+
+
 projection = pd.DataFrame.from_dict(data_dict)
+
+r_projection = pd.DataFrame.from_dict(r_data_dict)
 
 st.subheader("New Admissions")
 st.markdown("Projected number of **daily** COVID-19 admissions at Penn hospitals")
 
 # New cases
 projection_admits = projection.iloc[:-1, :] - projection.shift(1)
-projection_admits[projection_admits < 0] = 0
+r_projection_admits = r_projection.iloc[:-1, :] - r_projection.shift(1)
+
+projection_admits = projection_admits + r_projection_admits
+#projection_admits[projection_admits < 0] = 0
 
 plot_projection_days = n_days - 10
 projection_admits["day"] = range(projection_admits.shape[0])
