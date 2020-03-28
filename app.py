@@ -23,42 +23,42 @@ known_cases = 4 # update daily
 
 # Widgets
 current_hosp = st.sidebar.number_input(
-    "Hospitalizados actualmente con COVID-19", value=known_cases, step=1, format="%i"
+    "Currently Hospitalized COVID-19 Patients", value=known_cases, step=1, format="%i"
 )
 
 doubling_time = st.sidebar.number_input(
-    "Tiempo de duplicación antes del distanciamiento social (días)", value=6, step=1, format="%i"
+    "Doubling time before social distancing (days)", value=6, step=1, format="%i"
 )
 relative_contact_rate = st.sidebar.number_input(
-    "Distanciamiento social (% de reducción en el contacto social)", 0, 100, value=0, step=5, format="%i"
+    "Social distancing (% reduction in social contact)", 0, 100, value=0, step=5, format="%i"
 )/100.0
 
 hosp_rate = (
-    st.sidebar.number_input("% Hospitalización (infecciones totales)", 0.0, 100.0, value=5.0, step=1.0, format="%f")
+    st.sidebar.number_input("Hospitalization %(total infections)", 0.0, 100.0, value=5.0, step=1.0, format="%f")
     / 100.0
 )
 icu_rate = (
-    st.sidebar.number_input("% UTI (infecciones totales)", 0.0, 100.0, value=2.0, step=1.0, format="%f") / 100.0
+    st.sidebar.number_input("ICU %(total infections)", 0.0, 100.0, value=2.0, step=1.0, format="%f") / 100.0
 )
 vent_rate = (
-    st.sidebar.number_input("% Ventilado (infecciones totales)", 0.0, 100.0, value=1.0, step=1.0, format="%f")
+    st.sidebar.number_input("Ventilated %(total infections)", 0.0, 100.0, value=1.0, step=1.0, format="%f")
     / 100.0
 )
-hosp_los = st.sidebar.number_input("Días Internados", value=7, step=1, format="%i")
-icu_los = st.sidebar.number_input("Tiempo en UTI", value=9, step=1, format="%i")
-vent_los = st.sidebar.number_input("Tiempo Ventilado", value=10, step=1, format="%i")
+hosp_los = st.sidebar.number_input("Hospital Length of Stay", value=7, step=1, format="%i")
+icu_los = st.sidebar.number_input("ICU Length of Stay", value=9, step=1, format="%i")
+vent_los = st.sidebar.number_input("Vent Length of Stay", value=10, step=1, format="%i")
 Penn_market_share = (
     st.sidebar.number_input(
-        "Porcentaje de atencionHospital Market Share (%)", 0.0, 100.0, value=15.0, step=1.0, format="%f"
+        "Hospital Market Share (%)", 0.0, 100.0, value=15.0, step=1.0, format="%f"
     )
     / 100.0
 )
 S = st.sidebar.number_input(
-    "Población Regional", value=S_default, step=100000, format="%i"
+    "Regional Population", value=S_default, step=100000, format="%i"
 )
 
 initial_infections = st.sidebar.number_input(
-    "Infecciones actuales en la Región (solo se usa para calcular la tasa de detección, no cambia las proyecciones)", value=known_infections, step=10, format="%i"
+    "Currently Known Regional Infections (only used to compute detection rate - does not change projections)", value=known_infections, step=10, format="%i"
 )
 
 total_infections = current_hosp / Penn_market_share / hosp_rate
@@ -83,10 +83,10 @@ doubling_time_t = 1/np.log2(beta*S - gamma +1) # doubling time after distancing
 
 def head():
     st.markdown("""
-<link rel="stylesheet" href="https://covid19.regionsanitaria1.com/simulador.css">
+<link rel="stylesheet" href="https://www1.pennmedicine.org/styles/shared/penn-medicine-header.css">
 
 <div class="penn-medicine-header__content">
-    <a href="https://covid19.regionsanitaria1.com" class="penn-medicine-header__logo"
+    <a href="https://www.pennmedicine.org" class="penn-medicine-header__logo"
         title="Go to the Penn Medicine home page">Penn Medicine</a>
     <a id="title" class="penn-medicine-header__title">Penn Medicine - COVID-19 Hospital Impact Model for Epidemics</a>
 </div>
